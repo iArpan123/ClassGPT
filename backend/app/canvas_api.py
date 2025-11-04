@@ -14,22 +14,7 @@ async def get_user_profile():
         })
         return res.json()
 
-async def get_courses():
-    """
-    Returns only courses that appear on the user's Canvas Dashboard:
-    - Enrollment is active (student or TA)
-    - Course is published
-    - Handles pagination
-    - Sorted by creation date (latest first)
-    """
-    all_courses = []
-    params = {
-        "enrollment_type": ["student", "ta"],
-        "enrollment_state": "active",
-        "state[]": ["available"],
-        "include[]": ["term", "total_students", "teachers"],
-        "per_page": 100
-    }
+
 
 async def get_courses():
     """

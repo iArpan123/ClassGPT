@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.auth import router as auth_router
+from app.routes.chat import router as chat_router
 from app.canvas_api import get_user_profile, get_courses
+from app.routes import ingest
 
 
-app = FastAPI(title="Canvas AI Buddy")
+
+app = FastAPI(title="Canvas AI Buddy",debug=True)
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,6 +18,10 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(chat_router)
+app.include_router(ingest.router)
+
+
 
 @app.get("/")
 def root():
