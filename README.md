@@ -58,5 +58,5 @@ The system retrieves real data from Canvas and answers with precise, context-awa
 | **Session Memory** | Upstash Redis |
 | **Integration** | Canvas LMS REST API (v1) |
 | **Environment Management** | Python dotenv |
-## 🧭 System Architecture
+
 
