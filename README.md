@@ -1,49 +1,48 @@
-# 🧠 Canvas AI Buddy
+# 🎓 ClassGPT
 
-Canvas AI Buddy is a full-stack **AI-powered assistant** built to make interacting with your **Canvas LMS** smarter and faster.  
-It syncs real course content like assignments, announcements, and discussions — then lets you ask **natural-language questions** such as:
+**ClassGPT** is a full-stack **AI-powered academic assistant** that transforms how students and instructors interact with **Canvas LMS**.  
+It syncs real course content — assignments, announcements, and discussions — and lets users ask **natural-language questions** like:
 
 > “What’s due tomorrow?”  
 > “When is my project presentation?”  
-> “List all announcements posted this week.”
+> “Show me all announcements from this week.”
 
-The system retrieves real data from Canvas and answers with precise, context-aware responses using advanced AI.
+ClassGPT retrieves verified Canvas data and answers with context-aware, intelligent responses — all inside a sleek chat interface.
 
 ---
 
 ## ⚙️ How It Works
 
 1. **Course Data Ingestion**  
-   The backend connects to the Canvas LMS API to fetch assignments, announcements, discussions, and instructor data for each course.
+   ClassGPT connects securely to the Canvas LMS API to fetch assignments, announcements, discussions, and instructor information for each enrolled course.
 
-2. **Data Processing & Embedding**  
-   The text is cleaned and chunked using NLP preprocessing, then embedded via **OpenAI’s text-embedding-3-large** model to create high-dimensional semantic vectors.
+2. **Data Cleaning & Embedding**  
+   The system preprocesses and chunks course text before converting it into semantic embeddings using **OpenAI’s text-embedding-3-large** model.
 
 3. **Vector Storage**  
-   All embeddings are stored in **Pinecone**, a high-speed vector database optimized for similarity search.
+   Each embedding is stored in **Pinecone**, a high-performance vector database, allowing ClassGPT to perform semantic searches across course data.
 
-4. **Retrieval & Answer Generation**  
-   When a user asks a question, Pinecone retrieves the most relevant course content.  
-   The context is then sent to **GPT-4o-mini**, which crafts a clear, accurate, and course-specific response.
+4. **Question Answering**  
+   When a user asks a question, ClassGPT retrieves the most relevant content from Pinecone and uses **GPT-4o-mini** to generate an accurate, concise, and course-specific answer.
 
 5. **Session Memory**  
-   **Upstash Redis** keeps short-term memory for each chat session — allowing follow-up questions without reloading context.  
-   The memory resets automatically when the page refreshes for privacy.
+   **Upstash Redis** powers temporary, per-session memory — enabling follow-up questions within the same chat.  
+   Memory clears automatically upon refresh, ensuring privacy and lightweight operation.
 
-6. **Frontend Chat Interface**  
-   A minimal, intuitive **React (Vite)** interface allows users to select a course, chat, and get real-time AI answers in a clean conversational layout.
+6. **Interactive Chat UI**  
+   The frontend, built with **React (Vite)**, offers a modern chat experience where each Canvas course opens its own AI-powered conversation.
 
 ---
 
 ## 🧩 Core Features
 
-- 🎓 **Canvas-Integrated Intelligence** – Learns directly from your course data.  
-- 🗓️ **Smart Assignment Tracking** – Understands due dates, deadlines, and grading details.  
-- 💬 **Conversational Q&A** – Natural-language queries with short-term memory.  
-- ⚡ **Fast & Secure** – Async processing with serverless Redis memory.  
-- 🧠 **RAG Architecture** – Combines retrieval-augmented generation for reliable answers.  
-- 🌐 **OAuth Login** – Secure Canvas authentication with token exchange.  
-- 🧰 **Modern Frontend UX** – Smooth chat experience, responsive design, and clear visuals.
+- 🎓 **Canvas-Integrated AI** – Directly understands your course materials.  
+- 🗓️ **Smart Deadline Tracking** – Detects and summarizes due dates and grading details.  
+- 💬 **Conversational Q&A** – Natural-language chat with contextual understanding.  
+- ⚡ **Fast & Scalable** – Async backend and serverless Redis for performance.  
+- 🧠 **Retrieval-Augmented Generation (RAG)** – Combines vector search with generative AI for factual accuracy.  
+- 🔐 **Secure OAuth Integration** – Canvas login and token handling with FastAPI.  
+- 🧰 **Clean User Interface** – Responsive chat with typing animations and auto-scroll.
 
 ---
 
@@ -58,5 +57,9 @@ The system retrieves real data from Canvas and answers with precise, context-awa
 | **Session Memory** | Upstash Redis |
 | **Integration** | Canvas LMS REST API (v1) |
 | **Environment Management** | Python dotenv |
+| **Deployment Targets** | Render, Railway, Vercel, or Netlify |
 
+---
+
+## 🧭 System Architecture
 
