@@ -57,9 +57,6 @@ ClassGPT retrieves verified Canvas data and answers with context-aware, intellig
 | **Session Memory** | Upstash Redis |
 | **Integration** | Canvas LMS REST API (v1) |
 | **Environment Management** | Python dotenv |
-| **Deployment Targets** | Render, Railway, Vercel, or Netlify |
 
----
 
-## 🧭 System Architecture
 
