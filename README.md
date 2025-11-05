@@ -58,5 +58,4 @@ ClassGPT retrieves verified Canvas data and answers with context-aware, intellig
 | **Integration** | Canvas LMS REST API (v1) |
 | **Environment Management** | Python dotenv |
 
-
-
+---
