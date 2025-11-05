@@ -5,9 +5,10 @@ export default function CourseList({ onSelectCourse }) {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    getCourses()
-      .then(setCourses)
-      .catch((err) => console.error("Error loading courses:", err));
+    // Load user's courses on mount
+    getCourses().then(setCourses).catch(() => {
+      // Optional: handle error state gracefully (silent fail for now)
+    });
   }, []);
 
   return (
@@ -49,8 +50,12 @@ export default function CourseList({ onSelectCourse }) {
                 cursor: "pointer",
                 transition: "transform 0.15s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1.0)")}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.02)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1.0)")
+              }
             >
               {/* Header Banner */}
               <div
@@ -60,7 +65,7 @@ export default function CourseList({ onSelectCourse }) {
                   borderTopLeftRadius: "8px",
                   borderTopRightRadius: "8px",
                 }}
-              ></div>
+              />
 
               {/* Course Info */}
               <div style={{ padding: "1rem" }}>
@@ -74,7 +79,13 @@ export default function CourseList({ onSelectCourse }) {
                 >
                   {course.name}
                 </h3>
-                <p style={{ color: "#555", fontSize: "0.9rem", margin: 0 }}>
+                <p
+                  style={{
+                    color: "#555",
+                    fontSize: "0.9rem",
+                    margin: 0,
+                  }}
+                >
                   {course.course_code}
                 </p>
                 {course.term?.name && (

@@ -7,7 +7,7 @@ export default function ChatWindow({ course, onBack }) {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
@@ -17,15 +17,13 @@ export default function ChatWindow({ course, onBack }) {
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
-
-    // show "bot typing"
     setIsTyping(true);
 
     try {
       const res = await sendChat(course.id, input);
       const botMsg = { role: "assistant", content: res.answer || "..." };
       setMessages((prev) => [...prev, botMsg]);
-    } catch (err) {
+    } catch {
       const errorMsg = {
         role: "assistant",
         content: "⚠️ Sorry, something went wrong while fetching the answer.",
@@ -36,7 +34,7 @@ export default function ChatWindow({ course, onBack }) {
     }
   };
 
-  // handle enter key
+  // Send message on Enter (Shift+Enter adds newline)
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -99,8 +97,7 @@ export default function ChatWindow({ course, onBack }) {
           >
             <div
               style={{
-                backgroundColor:
-                  m.role === "user" ? "#3949ab" : "#e9ecf5",
+                backgroundColor: m.role === "user" ? "#3949ab" : "#e9ecf5",
                 color: m.role === "user" ? "#fff" : "#1d1d1d",
                 padding: "10px 14px",
                 borderRadius: "16px",
@@ -140,7 +137,7 @@ export default function ChatWindow({ course, onBack }) {
         <div ref={chatEndRef} />
       </div>
 
-      {/* Input */}
+      {/* Input bar */}
       <div
         style={{
           display: "flex",
@@ -185,7 +182,6 @@ export default function ChatWindow({ course, onBack }) {
   );
 }
 
-// Typing animation component
 function TypingDots() {
   const [dots, setDots] = useState("");
 

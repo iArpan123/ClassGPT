@@ -7,19 +7,22 @@ load_dotenv()
 BASE_URL = os.getenv("CANVAS_BASE_URL")
 ACCESS_TOKEN = os.getenv("CANVAS_ACCESS_TOKEN")
 
-async def get_user_profile():
-    async with httpx.AsyncClient() as client:
-        res = await client.get(f"{BASE_URL}/api/v1/users/self", headers={
-            "Authorization": f"Bearer {ACCESS_TOKEN}"
-        })
-        return res.json()
 
+async def get_user_profile():
+    """Fetch the authenticated user's Canvas profile information."""
+    async with httpx.AsyncClient() as client:
+        res = await client.get(
+            f"{BASE_URL}/api/v1/users/self",
+            headers={"Authorization": f"Bearer {ACCESS_TOKEN}"}
+        )
+        res.raise_for_status()
+        return res.json()
 
 
 async def get_courses():
     """
-    Returns only the user's FAVORITE (starred) Canvas courses —
-    exactly what appears on their dashboard.
+    Return the user's favorite (starred) Canvas courses,
+    as shown on their Canvas dashboard.
     """
     async with httpx.AsyncClient() as client:
         res = await client.get(
@@ -29,11 +32,8 @@ async def get_courses():
         res.raise_for_status()
         favorite_courses = res.json()
 
-    # Sort newest term first
     favorite_courses.sort(
         key=lambda c: c.get("term", {}).get("name", ""),
         reverse=True
     )
-
     return favorite_courses
-       

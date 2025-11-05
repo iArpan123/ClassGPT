@@ -1,0 +1,150 @@
+# =========================================================
+# 🌐 FRONTEND (React + Vite)
+# =========================================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build outputs
+.cache/
+coverage/
+*.tsbuildinfo
+
+# Local environment
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# =========================================================
+# 🐍 BACKEND (Python + FastAPI)
+# =========================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.pyo
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment files
+backend/.env
+.env
+.env.*
+*.env
+
+# Logs and databases
+*.log
+*.db
+*.sqlite3
+instance/
+*.pid
+
+# Compiled bytecode and cache
+.pytest_cache/
+.mypy_cache/
+__pypackages__/
+.eggs/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+site/
+
+# Testing / coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# =========================================================
+# 🧰 DEPLOYMENT / CI
+# =========================================================
+# Packaging
+build/
+develop-eggs/
+dist/
+.eggs/
+sdist/
+wheelhouse/
+
+# PyInstaller
+*.spec
+
+# tox / pytest / pipenv / poetry
+.tox/
+.nox/
+.poetry/
+Pipfile.lock
+poetry.lock
+
+# =========================================================
+# 💻 OS & TEMP FILES
+# =========================================================
+Thumbs.db
+ehthumbs.db
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+*.orig
+
+# =========================================================
+# 🚫 SECURITY
+# =========================================================
+# Keys, secrets, credentials
+secrets.*
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+*.crt
+*.p12
+
+# =========================================================
+# ✅ PROJECT SPECIFIC (Canvas AI Buddy)
+# =========================================================
+# Backend caches & compiled files
+backend/__pycache__/
+backend/app/__pycache__/
+backend/app/routes/__pycache__/
+backend/app/utils/__pycache__/
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
+# Ignore Python virtual envs in backend
+backend/venv/
+
+# Ignore .env files everywhere
+.env
+.env.*
+backend/.env
+frontend/.env

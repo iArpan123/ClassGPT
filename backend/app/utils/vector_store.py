@@ -12,11 +12,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 pc = Pinecone(api_key=PINECONE_API_KEY)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-# create index if not exists
+# ✅ Create Pinecone index if it doesn't exist
 if PINECONE_INDEX not in [i["name"] for i in pc.list_indexes()]:
     pc.create_index(
         name=PINECONE_INDEX,
-        dimension=3072,  # text-embedding-3-large
+        dimension=3072,  # dimension for text-embedding-3-large
         metric="cosine",
         spec=ServerlessSpec(cloud="aws", region="us-east-1"),
     )
@@ -25,9 +25,7 @@ index = pc.Index(PINECONE_INDEX)
 
 
 def embed_text(text: str) -> list[float]:
-    """
-    Returns embedding vector for a given text using OpenAI text-embedding-3-large
-    """
+    """Generate and return an embedding vector for the given text."""
     resp = client.embeddings.create(
         model="text-embedding-3-large",
         input=text,
@@ -37,7 +35,8 @@ def embed_text(text: str) -> list[float]:
 
 def upsert_chunks(course_id: int, chunks: list[dict]):
     """
-    chunks = [{ "id": "...", "text": "...", "metadata": {...}}]
+    Upload multiple text chunks as vectors to Pinecone for a course.
+    Each chunk = { "id": str, "text": str, "metadata": dict }
     """
     vectors = []
     for ch in chunks:
@@ -57,6 +56,7 @@ def upsert_chunks(course_id: int, chunks: list[dict]):
 
 
 def query_course(course_id: int, query: str, top_k: int = 5):
+    """Query Pinecone namespace for a course using semantic similarity search."""
     q_emb = embed_text(query)
     res = index.query(
         vector=q_emb,
