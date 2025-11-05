@@ -12,7 +12,6 @@ ACCESS_TOKEN = os.getenv("CANVAS_ACCESS_TOKEN")
 
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
-PINECONE_HOST = os.getenv("PINECONE_HOST")
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(PINECONE_INDEX)
@@ -26,17 +25,17 @@ async def ingest_course(course_id: int):
         headers = {"Authorization": f"Bearer {ACCESS_TOKEN}"}
 
         async with httpx.AsyncClient() as http:
-            # Fetch syllabus
+            # 1️⃣ Fetch course and syllabus
             course_res = await http.get(
                 f"{BASE_URL}/api/v1/courses/{course_id}",
                 headers=headers,
                 params={"include[]": "syllabus_body"},
             )
             course = course_res.json()
-            syllabus = course.get("syllabus_body", "")
             course_name = course.get("name", "Unknown Course")
+            syllabus = course.get("syllabus_body", "")
 
-            # Fetch assignments
+            # 2️⃣ Fetch assignments
             assignments_res = await http.get(
                 f"{BASE_URL}/api/v1/courses/{course_id}/assignments",
                 headers=headers,
@@ -44,7 +43,7 @@ async def ingest_course(course_id: int):
             )
             assignments = assignments_res.json()
 
-            # Fetch announcements
+            # 3️⃣ Fetch announcements
             announcements_res = await http.get(
                 f"{BASE_URL}/api/v1/announcements",
                 headers=headers,
@@ -52,7 +51,7 @@ async def ingest_course(course_id: int):
             )
             announcements = announcements_res.json()
 
-            # Fetch discussions
+            # 4️⃣ Fetch discussions
             discussions_res = await http.get(
                 f"{BASE_URL}/api/v1/courses/{course_id}/discussion_topics",
                 headers=headers,
@@ -60,10 +59,19 @@ async def ingest_course(course_id: int):
             )
             discussions = discussions_res.json()
 
-        # 🧩 Prepare chunks for embedding
+            # 5️⃣ Fetch instructors and TAs
+            people_res = await http.get(
+                f"{BASE_URL}/api/v1/courses/{course_id}/users",
+                headers=headers,
+                params={"enrollment_type[]": ["teacher", "ta"], "per_page": 50},
+            )
+            people = people_res.json()
+
+        # 🧠 Create text chunks
         text_chunks = []
+
         if syllabus:
-            text_chunks.append(f"Syllabus: {syllabus}")
+            text_chunks.append(f"Syllabus for {course_name}: {syllabus}")
 
         for a in assignments:
             text_chunks.append(
@@ -79,16 +87,21 @@ async def ingest_course(course_id: int):
 
         for d in discussions:
             text_chunks.append(
-                f"Discussion: {d.get('title')} | {d.get('message', '')}"
+                f"Discussion: {d.get('title')} | Message: {d.get('message', '')}"
             )
 
-        if not text_chunks:
-            raise HTTPException(status_code=400, detail="No data found for this course.")
+        for p in people:
+            name = p.get("name", "Unknown")
+            role = p.get("enrollments", [{}])[0].get("type", "Staff")
+            email = f"{p.get('login_id', '')}@asu.edu"
+            text_chunks.append(f"{role}: {name} | Email: {email}")
 
-        # 🧠 Create embeddings
+        if not text_chunks:
+            raise HTTPException(status_code=400, detail="No course data found.")
+
+        # 🧩 Generate embeddings in batches
         embeddings = []
         batch_size = 50
-
         for i in range(0, len(text_chunks), batch_size):
             batch = text_chunks[i:i + batch_size]
             response = client.embeddings.create(
